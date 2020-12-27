@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,7 +50,7 @@ namespace ZapuskatorWindowsFormsApp
 
                 PerformanceCounter pc = new PerformanceCounter();
                 pc.CategoryName = "Process";
-                pc.CounterName = "Woring Set - Privat";
+                pc.CounterName = "Working Set - Private";
                 pc.InstanceName = pr.ProcessName;
 
                 memSize = (double)pc.NextValue() / (1000 * 1000); //вычитываем точный размер памяти.
@@ -272,6 +273,42 @@ namespace ZapuskatorWindowsFormsApp
         /// <param name="e"></param>
         private void запуститьЗадачуToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string path = Interaction.InputBox("ВВедите имя программы","Запуск новой задачи");
+            try
+            {
+                Process.Start(path); // запуск программы помени.
+            }
+            catch(Exception ex)
+            {
+                try
+                {
+                    string pathEx = Interaction.InputBox(@"Произошла ошибка при запуске прораммы. Укажите точное расположение к папке с программы с .EXe. Пример C:\Program Files\Notepad++\notepad++.exe", "Запуск новой задачи");
+                }
+                catch(Exception ex1)
+                {
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// Кнопка выход
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void toolStripTextBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            GetProcesses();
 
         }
     }
