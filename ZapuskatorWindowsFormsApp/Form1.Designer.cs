@@ -49,6 +49,7 @@
             this.завершитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.завершитиьДеревоПроцессовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.установитьПриСтартеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.запуститьЗадачуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -69,6 +70,7 @@
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.сохранитьToolStripMenuItem,
+            this.запуститьЗадачуToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
@@ -107,6 +109,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(107, 22);
             this.toolStripButton1.Text = "Обновить список";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripButton2
             // 
@@ -116,6 +119,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(72, 22);
             this.toolStripButton2.Text = "Завершить";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripButton3
             // 
@@ -125,6 +129,7 @@
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(175, 22);
             this.toolStripButton3.Text = "Завершить дерево процессов";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // toolStripButton4
             // 
@@ -132,7 +137,7 @@
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(179, 22);
+            this.toolStripButton4.Size = new System.Drawing.Size(179, 19);
             this.toolStripButton4.Text = "Установть при старте системы";
             // 
             // toolStrip2
@@ -200,18 +205,27 @@
             this.завершитьToolStripMenuItem.Name = "завершитьToolStripMenuItem";
             this.завершитьToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.завершитьToolStripMenuItem.Text = "Завершить";
+            this.завершитьToolStripMenuItem.Click += new System.EventHandler(this.завершитьToolStripMenuItem_Click);
             // 
             // завершитиьДеревоПроцессовToolStripMenuItem
             // 
             this.завершитиьДеревоПроцессовToolStripMenuItem.Name = "завершитиьДеревоПроцессовToolStripMenuItem";
             this.завершитиьДеревоПроцессовToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.завершитиьДеревоПроцессовToolStripMenuItem.Text = "Завершитиь дерево процессов";
+            this.завершитиьДеревоПроцессовToolStripMenuItem.Click += new System.EventHandler(this.завершитиьДеревоПроцессовToolStripMenuItem_Click);
             // 
             // установитьПриСтартеToolStripMenuItem
             // 
             this.установитьПриСтартеToolStripMenuItem.Name = "установитьПриСтартеToolStripMenuItem";
             this.установитьПриСтартеToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.установитьПриСтартеToolStripMenuItem.Text = "Установить при старте";
+            // 
+            // запуститьЗадачуToolStripMenuItem
+            // 
+            this.запуститьЗадачуToolStripMenuItem.Name = "запуститьЗадачуToolStripMenuItem";
+            this.запуститьЗадачуToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.запуститьЗадачуToolStripMenuItem.Text = "Запустить задачу";
+            this.запуститьЗадачуToolStripMenuItem.Click += new System.EventHandler(this.запуститьЗадачуToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -226,6 +240,7 @@
             this.MinimumSize = new System.Drawing.Size(374, 352);
             this.Name = "Form1";
             this.Text = "Запускатор";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -259,6 +274,7 @@
         private System.Windows.Forms.ToolStripMenuItem завершитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem завершитиьДеревоПроцессовToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem установитьПриСтартеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem запуститьЗадачуToolStripMenuItem;
     }
 }
 

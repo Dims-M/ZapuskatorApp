@@ -24,6 +24,9 @@ namespace ZapuskatorWindowsFormsApp
             InitializeComponent();
         }
 
+        /// <summary>
+        ///  Gолучаем все процессы и приводим к типу лист
+        /// </summary>
         private void GetProcesses()
         {
             processors.Clear();
@@ -31,7 +34,7 @@ namespace ZapuskatorWindowsFormsApp
         }
 
         /// <summary>
-        /// Взаимодествие с листом
+        /// Взаимодествие с листом. заполняем лист новыми данными.
         /// </summary>
         private void RefreshProcesserList()
         {
@@ -126,6 +129,150 @@ namespace ZapuskatorWindowsFormsApp
             {
 
             }
+        }
+
+        /// <summary>
+        /// Получаем id родителького процесса
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        private int GetParentProcessId(Process p)
+        {
+            int parentID = 0;
+            try
+            {
+                ManagementObject managementObject = new ManagementObject("win32_process.handle='"+p.Id+"'");
+                managementObject.Get();
+                parentID = Convert.ToInt32(managementObject["ParentProcessId"]);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return parentID;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            processors = new List<Process>();
+            GetProcesses();
+            RefreshProcesserList();
+        }
+
+        /// <summary>
+        /// Кнопка обновить
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            GetProcesses();
+            RefreshProcesserList();
+        }
+        
+        /// <summary>
+        /// Кнопка завершить процесс.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems[0]!=null)
+                {
+                    Process processToKill = processors.Where((x)=> x.ProcessName ==
+                    listView1.SelectedItems[0].SubItems[0].Text).ToList()[0];
+                    
+                    KillProssec(processToKill);
+                    GetProcesses();
+                    RefreshProcesserList();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// кнопка завершить дерево процессов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems[0] != null)
+                {
+                    Process processToKill = processors.Where((x) => x.ProcessName ==
+                    listView1.SelectedItems[0].SubItems[0].Text).ToList()[0];
+
+                    KillProssecAndChildren(GetParentProcessId(processToKill));
+                    GetProcesses();
+                    RefreshProcesserList();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// завершить дерево процессов в меню мыши.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void завершитиьДеревоПроцессовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems[0] != null)
+                {
+                    Process processToKill = processors.Where((x) => x.ProcessName ==
+                    listView1.SelectedItems[0].SubItems[0].Text).ToList()[0];
+
+                    KillProssecAndChildren(GetParentProcessId(processToKill));
+                    GetProcesses();
+                    RefreshProcesserList();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void завершитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems[0] != null)
+                {
+                    Process processToKill = processors.Where((x) => x.ProcessName ==
+                    listView1.SelectedItems[0].SubItems[0].Text).ToList()[0];
+
+                    KillProssec(processToKill);
+                    GetProcesses();
+                    RefreshProcesserList();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Кнопка запустить задачу
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void запуститьЗадачуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
