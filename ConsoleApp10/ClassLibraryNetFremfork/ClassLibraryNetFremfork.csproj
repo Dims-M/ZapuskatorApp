@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{929D4181-C972-4A06-8D31-50ECF6680A84}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp10</RootNamespace>
-    <AssemblyName>ConsoleApp10</AssemblyName>
+    <ProjectGuid>{AAC11B44-2180-436F-A8C3-19B2D0BC083C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ClassLibraryNetFremfork</RootNamespace>
+    <AssemblyName>ClassLibraryNetFremfork</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,34 +39,19 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TeleSharp.TL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TLSharp.0.1.0.574\lib\net46\TeleSharp.TL.dll</HintPath>
+    </Reference>
+    <Reference Include="TLSharp.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TLSharp.0.1.0.574\lib\net46\TLSharp.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataStore\SomeData.cs" />
-    <Compile Include="RemoteApi\ApiResponse.cs" />
-    <Compile Include="DataSendingManager.cs" />
-    <Compile Include="Events\AddDataEvent.cs" />
-    <Compile Include="DataStore\Store.cs" />
-    <Compile Include="Events\BaseEvent.cs" />
-    <Compile Include="Events\IEvent.cs" />
-    <Compile Include="RemoteApi\IRemoteApiService.cs" />
-    <Compile Include="MessageBuilders\IMessage.cs" />
-    <Compile Include="MessageBuilders\IMessageBuilder.cs" />
-    <Compile Include="MessageBuilders\IMessageBuilderFactory.cs" />
-    <Compile Include="MessageBuilders\Message.cs" />
-    <Compile Include="MessageBuilders\MessageBuilderFactory.cs" />
-    <Compile Include="MessageBuilders\AddDataMessageBuilder.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteApi\RemoteApiService.cs" />
+    <Compile Include="Telega.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ClassLibraryTelegram\ClassLibraryTelegram.csproj">
-      <Project>{5F9938AD-3AF6-4215-80E4-1E804EC917CA}</Project>
-      <Name>ClassLibraryTelegram</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
