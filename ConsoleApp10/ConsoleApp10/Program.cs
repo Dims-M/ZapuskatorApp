@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using ClassLibraryNetFremfork;
 using ClassLibraryTelegram;
 using ConsoleApp10.DataStore;
 using ConsoleApp10.MessageBuilders;
@@ -25,8 +26,17 @@ namespace ConsoleApp10
 
        static void GetMessage()
         {
-            Telega telega = new Telega();
-            var message = telega.GetChatTelegram();
+            // Telega telega = new Telega();
+            //  var message = telega.GetChatTelegram();
+            // Console.WriteLine(message);
+
+           // Tests tests = new Tests();
+          //  tests.AuthUser();
+            
+
+            Console.WriteLine("Press any key to stop.");
+            Console.ReadKey(true);
+
         }
 
         /// <summary>

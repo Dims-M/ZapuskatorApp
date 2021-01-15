@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp10", "ConsoleApp1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{A5CCD673-0862-4DF7-A230-162D32ED8814}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryTelegram", "ClassLibraryTelegram\ClassLibraryTelegram.csproj", "{5F9938AD-3AF6-4215-80E4-1E804EC917CA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryNetFremfork", "ClassLibraryNetFremfork\ClassLibraryNetFremfork.csproj", "{AAC11B44-2180-436F-A8C3-19B2D0BC083C}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{A5CCD673-0862-4DF7-A230-162D32ED8814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5CCD673-0862-4DF7-A230-162D32ED8814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5CCD673-0862-4DF7-A230-162D32ED8814}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F9938AD-3AF6-4215-80E4-1E804EC917CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F9938AD-3AF6-4215-80E4-1E804EC917CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F9938AD-3AF6-4215-80E4-1E804EC917CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F9938AD-3AF6-4215-80E4-1E804EC917CA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AAC11B44-2180-436F-A8C3-19B2D0BC083C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AAC11B44-2180-436F-A8C3-19B2D0BC083C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAC11B44-2180-436F-A8C3-19B2D0BC083C}.Release|Any CPU.ActiveCfg = Release|Any CPU

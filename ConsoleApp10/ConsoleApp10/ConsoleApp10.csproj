@@ -65,9 +65,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibraryTelegram\ClassLibraryTelegram.csproj">
-      <Project>{5F9938AD-3AF6-4215-80E4-1E804EC917CA}</Project>
-      <Name>ClassLibraryTelegram</Name>
+    <ProjectReference Include="..\ClassLibraryNetFremfork\ClassLibraryNetFremfork.csproj">
+      <Project>{AAC11B44-2180-436F-A8C3-19B2D0BC083C}</Project>
+      <Name>ClassLibraryNetFremfork</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
