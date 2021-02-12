@@ -18,7 +18,7 @@ namespace ClassLibraryTelegram
         /// <summary>
         /// ID нужного чата
         /// </summary>
-        int VKFID = 1003740416; //1472627584
+        int VKFID = 1460007515; //1472627584 Constructor = 1728035348 1102909292 - криминал
         int apiId = 1858476;
 
         string apiHash = "e54eb14509f7bcc5602a1b7c7b7488aa";
@@ -26,8 +26,10 @@ namespace ClassLibraryTelegram
 
         int n = 1; //начало сообщений 
         int countMessa = 0 ; // Нужное количество сообщений
+        string listChats = "Список чатов"+Environment.NewLine;
 
         StringBuilder sb = new StringBuilder();
+
         //TelegramClient client = new TelegramClient(<key> <hash>);
       //  TelegramClient client = new TelegramClient(apiId, apiHash);
         TLUser user;
@@ -181,7 +183,9 @@ namespace ClassLibraryTelegram
 
               
                 bool stop = true;
-            TelegramClient client = new TelegramClient(apiId, apiHash);
+                int count = 0;
+
+               TelegramClient client = new TelegramClient(apiId, apiHash);
               
                 await client.ConnectAsync();
                 //var hash = await client.SendCodeRequestAsync("+79179037140");
@@ -189,26 +193,66 @@ namespace ClassLibraryTelegram
                 //var code = "72772";
                 //var user = await client.MakeAuthAsync("+79179037140", hash, code);
 
-                sb.Append("#\tDate\tTime\tMID\tTUID\tText" + Environment.NewLine);
+            sb.Append("#\tDate\tTime\tMID\tTUID\tText" + Environment.NewLine);
             TLDialogsSlice dialogs = (TLDialogsSlice)await client.GetUserDialogsAsync(); //Получаем список чатов(диалогов)
+               
+               // var tempDialogsChats = dialogs.Chats; // выгружаем  полученные список чатов
+
+                foreach (var element in dialogs.Chats)
+                {
+                    if (element is TLChat )
+                    {
+                        TLChat chats = element as TLChat;
+                        listChats += $"Название {chats.Title} ID чата {chats.Id} " + Environment.NewLine;
+                    }
+
+                    if (element is TLChannel)
+                    {
+                        TLChannel chats = element as TLChannel;
+                        listChats += $"Название {chats.Title} ID чата {chats.Id} " + Environment.NewLine;
+                    }
+
+                    if (element is TLChatForbidden)
+                    {
+                        TLChatForbidden chats = element as TLChatForbidden;
+                        listChats += $"Название {chats.Title} ID чата {chats.Id} " + Environment.NewLine;
+                    }
+
+
+                    //if (chats is TLDialogS)
+                    //    continue;
+                }
+                SaveTextFile(listChats, "Список чатов.txt");
+
+
             TLChannel chat = dialogs.Chats.Where(c => c.GetType() == typeof(TLChannel)).Cast<TLChannel>().FirstOrDefault(c => c.Id == VKFID); //Выбираем нужный нам чат
-            TLInputPeerChannel inputPeer = new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = (long)chat.AccessHash };
+
+           //if (chat == null)
+           // {
+                  
+           // }
+
+           TLInputPeerChannel inputPeer = new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = (long)chat.AccessHash };
            
             while (stop)
             {
-                if (n > 100)
+                    if (n > count)
+                    {
+                        stop = false;
+                    }
+                    try
                 {
-                    stop = false;
-                }
-                try
-                {
-                    TLChannelMessages res = await client.SendRequestAsync<TLChannelMessages>
-                    (new TLRequestGetHistory() { Peer = inputPeer, Limit = 1000, AddOffset = offset, OffsetId = 0 });
-                    var msgs = res.Messages;
+                    TLChannelMessages res = await client.SendRequestAsync<TLChannelMessages> //получаем список все собщений из выбранного чата
+                    (new TLRequestGetHistory() { Peer = inputPeer, Limit = 1000, AddOffset = offset, OffsetId = 0 }); 
+                   
+                        var msgs = res.Messages; // выгружаем список сообщений
+
+                    count = res.Count++;
+
                     if (res.Count > offset)
                     {
                         offset += msgs.Count;
-                        foreach (TLAbsMessage msg in msgs)
+                        foreach (TLAbsMessage msg in msgs) 
                         {
                             if (msg is TLMessage)
                             {
@@ -222,8 +266,10 @@ namespace ClassLibraryTelegram
                             if (msg is TLMessageService)
                                 continue;
                             n++;
+
                         }
                             SaveTextFile(sb.ToString());
+                            SaveTextFileBuilder(sb);
                             Thread.Sleep(22000); //to avoid TelegramFloodException
                     }
                     else
@@ -231,6 +277,7 @@ namespace ClassLibraryTelegram
                 }
                 catch (Exception ex)
                 {
+                        SaveTextFile("Ошибка +"+ex, @"LogError.txt");
                     return ex.Message;
                     // MessageBox.Show(ex.Message);
                    // break;
@@ -246,29 +293,34 @@ namespace ClassLibraryTelegram
             }
             catch (Exception ex)
             {
+                SaveTextFile("Ошибка +" + ex, @"LogError.txt");
                 return ex.ToString();
             }
         }
 
 
 
-        public void SaveTextFile(string text, string path= @"LogError.txt")
+        public async void SaveTextFile(string text, string path= @"Log_INFO.txt")
         {
-            string writePath = path;
-            try
+            await Task.Run(() =>
             {
-                using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+                string writePath = path;
+
+                try
                 {
-                    sw.WriteLine(text);
-                }   
-            }
-            catch (Exception e)
-            {
-              //  Console.WriteLine(e.Message);
-            }
+                    using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
+                    {
+                        sw.WriteLine(text);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //  Console.WriteLine(e.Message);
+                }
+            });
         }
 
-        public void SaveTextFileBuilder(StringBuilder text, string path = @"LogTelegram.txt")
+        public void SaveTextFileBuilder(StringBuilder text, string path = @"LogTelegramB.txt")
         {
             string writePath = path;
             try

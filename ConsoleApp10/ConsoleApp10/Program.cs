@@ -37,6 +37,7 @@ namespace ConsoleApp10
 
             Console.WriteLine("Press any key to stop.");
             Console.ReadKey(true);
+            Console.WriteLine("******************.");
 
         }
 
