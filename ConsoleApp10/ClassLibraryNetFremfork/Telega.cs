@@ -18,20 +18,21 @@ namespace ClassLibraryTelegram
         /// <summary>
         /// ID нужного чата
         /// </summary>
-        int VKFID = 1460007515; //1472627584 Constructor = 1728035348 1102909292 - криминал
+        int VKFID = 1240304865; //1472627584 Constructor = 1728035348 1102909292 - криминал
         int apiId = 1858476;
 
         string apiHash = "e54eb14509f7bcc5602a1b7c7b7488aa";
         int offset = 0;
 
-        int n = 1; //начало сообщений 
+        int n = 0; //начало сообщений 
         int countMessa = 0 ; // Нужное количество сообщений
         string listChats = "Список чатов"+Environment.NewLine;
 
         StringBuilder sb = new StringBuilder();
 
+        TelegramClient client;
         //TelegramClient client = new TelegramClient(<key> <hash>);
-      //  TelegramClient client = new TelegramClient(apiId, apiHash);
+        //  TelegramClient client = new TelegramClient(apiId, apiHash);
         TLUser user;
 
         private DateTime ConvertFromUnixTimestamp(double timestamp)
@@ -180,12 +181,13 @@ namespace ClassLibraryTelegram
 
             try
             {
-
               
-                bool stop = true;
-                int count = 0;
 
-               TelegramClient client = new TelegramClient(apiId, apiHash);
+
+                bool stop = true;
+                int count = 2;
+
+                client = new TelegramClient(apiId, apiHash);
               
                 await client.ConnectAsync();
                 //var hash = await client.SendCodeRequestAsync("+79179037140");
@@ -193,7 +195,9 @@ namespace ClassLibraryTelegram
                 //var code = "72772";
                 //var user = await client.MakeAuthAsync("+79179037140", hash, code);
 
-            sb.Append("#\tDate\tTime\tMID\tTUID\tText" + Environment.NewLine);
+               // DownloadFileFromWrongLocationTest();
+
+                sb.Append("#\tDate\tTime\tMID\tTUID\tText" + Environment.NewLine);
             TLDialogsSlice dialogs = (TLDialogsSlice)await client.GetUserDialogsAsync(); //Получаем список чатов(диалогов)
                
                // var tempDialogsChats = dialogs.Chats; // выгружаем  полученные список чатов
@@ -270,8 +274,9 @@ namespace ClassLibraryTelegram
                         }
                             SaveTextFile(sb.ToString());
                             SaveTextFileBuilder(sb);
-                            Thread.Sleep(22000); //to avoid TelegramFloodException
-                    }
+                            Thread.Sleep(22000);
+                            //Thread.Sleep(22000); //to avoid TelegramFloodException 36,67 минут https://www.yandex.ru/search/?lr=43&offline_search=1&text=%D0%BA%D0%B0%D0%BB%D1%8C%D0%BA%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%20%D1%81%D0%B5%D0%BA%D1%83%D0%BD%D0%B4%20%D0%B2%20%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D1%8B
+                        }
                     else
                         break;
                 }
@@ -284,10 +289,13 @@ namespace ClassLibraryTelegram
                 }
                 finally
                 {
-                    await Task.Delay(22000); //чтобы обойти TelegramFloodException
+                        
+                         await Task.Delay(22000); //чтобы обойти TelegramFloodException
+                        SaveTextFile("Завершение работы", "Завершение работы.txt");
+                       
                 }
             }
-            return  sb.ToString();
+            return listChats;
                 //MessageBox.Show("Done");
 
             }
@@ -336,22 +344,96 @@ namespace ClassLibraryTelegram
             }
         }
 
+        private string NumberToSendMessage { get; set; }
+        public virtual async Task DownloadFileFromContactTest()
+        {
+            var client = new TelegramClient(apiId, apiHash); 
 
+            await client.ConnectAsync();
 
+            var result = await client.GetContactsAsync();
 
+            var user = result.Users
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
+            var inputPeer = new TLInputPeerUser() { UserId = user.Id };
+            var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { Peer = inputPeer });
+            var document = res.Messages
+                .OfType<TLMessage>()
+                .Where(m => m.Media != null)
+                .Select(m => m.Media)
+                .OfType<TLMessageMediaDocument>()
+                .Select(md => md.Document)
+                .OfType<TLDocument>()
+                .First();
+
+            var resFile = await client.GetFile(
+                new TLInputDocumentFileLocation()
+                {
+                    AccessHash = document.AccessHash,
+                    Id = document.Id,
+                    Version = document.Version
+                },
+                document.Size);
+
+            Assert.IsTrue(resFile.Bytes.Length > 0);
+        }
+
+        /// <summary>
+        /// Тестовой загрузчик файлов
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task DownloadFileFromWrongLocationTest()
+        {
+            try
+            {
+            client = new TelegramClient(apiId, apiHash);
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.Users
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.Id == 688062);
+
+            var photo = ((TLUserProfilePhoto)user.Photo);
+            var photoLocation = (TLFileLocation)photo.PhotoBig;
+
+            var resFile = await client.GetFile(new TLInputFileLocation()
+            {
+                LocalId = photoLocation.LocalId,
+                Secret = photoLocation.Secret,
+                VolumeId = photoLocation.VolumeId
+            }, 1024);
+
+            var res = await client.GetUserDialogsAsync();
+
+            Assert.IsTrue(resFile.Bytes.Length > 0);
+
+            }
+            catch (Exception ex)
+            {
+                SaveTextFile("Ошибка в методе DownloadFileFromWrongLocationTest()" + ex, "Работа с файлом_DownloadFileFromWrongLocationTest().txt");
+            }
+        }
+
+        
     }
 
-    //class Assert
-    //{
-    //    static internal void IsNotNull(object obj)
-    //    {
-    //        IsNotNullHanlder(obj);
-    //    }
+    class Assert
+    {
+        internal static Action<object> IsNotNullHanlder;
+        internal static Action<bool> IsTrueHandler;
+        static internal void IsNotNull(object obj)
+        {
+            IsNotNullHanlder(obj);
+        }
 
-    //    static internal void IsTrue(bool cond)
-    //    {
-    //        IsTrueHandler(cond);
-    //    }
-    //}
+        static internal void IsTrue(bool cond)
+        {
+            IsTrueHandler(cond);
+        }
+    }
 }
