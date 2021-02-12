@@ -396,19 +396,21 @@ namespace ClassLibraryTelegram
 
             var user = result.Users
                 .OfType<TLUser>()
-                .FirstOrDefault(x => x.Id == 688062);
+                .FirstOrDefault(x => x.Id == 96761274);
 
             var photo = ((TLUserProfilePhoto)user.Photo);
-            var photoLocation = (TLFileLocation)photo.PhotoBig;
+            var photoLocation = (TLFileLocation)photo.PhotoSmall;
+
+            var res = await client.GetUserDialogsAsync();
 
             var resFile = await client.GetFile(new TLInputFileLocation()
             {
                 LocalId = photoLocation.LocalId,
                 Secret = photoLocation.Secret,
                 VolumeId = photoLocation.VolumeId
-            }, 1024);
+            }, 0);
 
-            var res = await client.GetUserDialogsAsync();
+            var res1 = await client.GetUserDialogsAsync();
 
             Assert.IsTrue(resFile.Bytes.Length > 0);
 
