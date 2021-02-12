@@ -18,10 +18,10 @@ namespace ClassLibraryTelegram
         /// <summary>
         /// ID нужного чата
         /// </summary>
-        int VKFID = XXX; //
-        int apiId = XXX;
+        int VKFID = 1003740416; //1472627584
+        int apiId = 1858476;
 
-        string apiHash = "XXXXXX";
+        string apiHash = "e54eb14509f7bcc5602a1b7c7b7488aa";
         int offset = 0;
 
         int n = 1; //начало сообщений 
@@ -45,12 +45,12 @@ namespace ClassLibraryTelegram
                 TelegramClient client = new TelegramClient(apiId, apiHash);
                 await client.ConnectAsync();
 
-                //var hash = await client.SendCodeRequestAsync("+XXXX);
+                //var hash = await client.SendCodeRequestAsync("+79179037140");
 
                 //string stop = "";
                 //var code = "71486";
 
-                //var user = await client.MakeAuthAsync("+XXXX", hash, code);
+                //var user = await client.MakeAuthAsync("+79179037140", hash, code);
 
                 // var temp =  ConfigurationManager.AppSettings[nameof(ApiHash)];
 
@@ -173,6 +173,85 @@ namespace ClassLibraryTelegram
         //}
 
 
+        public async Task<string> button3_ClickAsync()
+        {
+
+            try
+            {
+
+              
+                bool stop = true;
+            TelegramClient client = new TelegramClient(apiId, apiHash);
+              
+                await client.ConnectAsync();
+                //var hash = await client.SendCodeRequestAsync("+79179037140");
+
+                //var code = "72772";
+                //var user = await client.MakeAuthAsync("+79179037140", hash, code);
+
+                sb.Append("#\tDate\tTime\tMID\tTUID\tText" + Environment.NewLine);
+            TLDialogsSlice dialogs = (TLDialogsSlice)await client.GetUserDialogsAsync(); //Получаем список чатов(диалогов)
+            TLChannel chat = dialogs.Chats.Where(c => c.GetType() == typeof(TLChannel)).Cast<TLChannel>().FirstOrDefault(c => c.Id == VKFID); //Выбираем нужный нам чат
+            TLInputPeerChannel inputPeer = new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = (long)chat.AccessHash };
+           
+            while (stop)
+            {
+                if (n > 100)
+                {
+                    stop = false;
+                }
+                try
+                {
+                    TLChannelMessages res = await client.SendRequestAsync<TLChannelMessages>
+                    (new TLRequestGetHistory() { Peer = inputPeer, Limit = 1000, AddOffset = offset, OffsetId = 0 });
+                    var msgs = res.Messages;
+                    if (res.Count > offset)
+                    {
+                        offset += msgs.Count;
+                        foreach (TLAbsMessage msg in msgs)
+                        {
+                            if (msg is TLMessage)
+                            {
+                                TLMessage message = msg as TLMessage;
+                                sb.Append(n.ToString() + "\t" +
+                                    ConvertFromUnixTimestamp(message.Date).ToLocalTime().ToString("dd'.'MM'.'yyyy") + "\t" +
+                                    ConvertFromUnixTimestamp(message.Date).ToLocalTime().ToString("HH':'mm':'ss") + "\t" +
+                                    message.Id + "\t" + message.FromId + "\t" + message.Message + Environment.NewLine);
+                            }
+                                
+                            if (msg is TLMessageService)
+                                continue;
+                            n++;
+                        }
+                            SaveTextFile(sb.ToString());
+                            Thread.Sleep(22000); //to avoid TelegramFloodException
+                    }
+                    else
+                        break;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                    // MessageBox.Show(ex.Message);
+                   // break;
+                }
+                finally
+                {
+                    await Task.Delay(22000); //чтобы обойти TelegramFloodException
+                }
+            }
+            return  sb.ToString();
+                //MessageBox.Show("Done");
+
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
+
+
         public void SaveTextFile(string text, string path= @"LogError.txt")
         {
             string writePath = path;
@@ -204,6 +283,10 @@ namespace ClassLibraryTelegram
                 //  Console.WriteLine(e.Message);
             }
         }
+
+
+
+
 
     }
 

@@ -26,12 +26,13 @@ namespace ConsoleApp10
 
        static void GetMessage()
         {
-            // Telega telega = new Telega();
-            //  var message = telega.GetChatTelegram();
-            // Console.WriteLine(message);
+             Telega telega = new Telega();
+             //var message = telega.GetChatTelegram(); //самопистый
+            var message = telega.button3_ClickAsync();
+             Console.WriteLine(message);
 
-           // Tests tests = new Tests();
-          //  tests.AuthUser();
+           // Tests tests = new Tests();  //ПРИМЕР с сайта разработчкика
+           // tests.AuthUser();
             
 
             Console.WriteLine("Press any key to stop.");
